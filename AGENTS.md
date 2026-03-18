@@ -2,60 +2,160 @@
 
 Instructions for AI coding agents working in this repository.
 
-## Workflow: OpenSpec
+## Project Overview
 
-This project uses [OpenSpec](https://github.com/openspec-dev/openspec) for structured change management. All non-trivial changes must go through the OpenSpec workflow.
+Climbing journal SPA — browser-only, no backend. Vite + React + TypeScript, Tailwind CSS v3 + shadcn/ui, sql.js (SQLite WASM), react-i18next (PL/EN), Recharts, React Router (hash-based). Hosted on GitHub Pages.
 
-### Commands
+## Build / Lint / Test Commands
 
-| Command | Purpose |
-|---------|---------|
-| `/opsx-propose` | Propose a new change (creates proposal, design, and tasks) |
-| `/opsx-apply` | Implement tasks from an existing change |
-| `/opsx-explore` | Think through ideas before or during a change |
-| `/opsx-archive` | Archive a completed change |
+```bash
+npm run build          # TypeScript check (tsc -b) + Vite production build
+npm run dev            # Start dev server (default port 5173)
+npm run lint           # ESLint (typescript-eslint + react-hooks + react-refresh)
+npm test               # Run all tests once (vitest run)
+npm run test:watch     # Watch mode (vitest)
 
-### Rules
+# Run a single test file:
+npx vitest run src/db/operations/profile.test.ts
 
-1. **Propose before implementing.** Do not start coding non-trivial features or refactors without first creating an OpenSpec change via `/opsx-propose`.
-2. **Follow the artifacts.** Read `proposal.md`, `design.md`, and `tasks.md` before writing code. Implementation must stay aligned with the approved design.
-3. **Mark tasks as you go.** Update `tasks.md` checkboxes (`- [ ]` to `- [x]`) immediately after completing each task.
-4. **Archive when done.** Once all tasks are complete, use `/opsx-archive` to finalize the change.
-
-## Commits: Conventional Commits
-
-All commits must follow the [Conventional Commits](https://www.conventionalcommits.org/) specification.
-
-### Format
-
+# Run tests matching a name pattern:
+npx vitest run -t "creates profile"
 ```
-<type>[optional scope]: <description>
 
-[optional body]
+The build command runs `tsc -b` first — all TypeScript errors must be resolved before Vite bundling starts. Always run `npm run build` to verify after changes.
 
-[optional footer(s)]
+## TypeScript Configuration
+
+- **Strict mode** enabled: `strict`, `noUnusedLocals`, `noUnusedParameters`, `noFallthroughCasesInSwitch`
+- **`verbatimModuleSyntax: true`** — use `import type { X }` for type-only imports
+- **Path alias**: `@/*` maps to `./src/*` — use this for all cross-directory imports
+- **Target**: ES2023, JSX: react-jsx
+
+## Code Style
+
+### Imports
+
+Order (no blank line separators between groups):
+1. React (`import { useState, useEffect } from "react"`)
+2. Third-party libraries (`react-i18next`, `react-router-dom`, `recharts`, `lucide-react`)
+3. Local `@/` imports — UI primitives (`@/components/ui/*`)
+4. Local `@/` imports — app modules (`@/db/*`, `@/grades/*`, `@/lib/*`, `@/components/*`, `@/pages/*`)
+5. Relative imports (`./sibling`) — only for same-directory references
+
+Use `import type` for type-only imports (enforced by `verbatimModuleSyntax`):
+```typescript
+import type { Database } from "sql.js";
+import { createLocation, type Location } from "@/db/operations/locations";
 ```
+
+### Exports
+
+- **Default exports**: React components only (`export default function ComponentName()`)
+- **Named exports**: everything else — DB operations, utilities, types, interfaces, constants, hooks
+
+### Components
+
+- Always use **function declarations**, never arrow functions or `React.FC`:
+  ```typescript
+  export default function ProfileForm({ initial, onSubmit }: ProfileFormProps) {
+  ```
+- Props are typed via an **interface defined above the component**, destructured in the signature
+- Props interfaces are NOT exported unless their types are needed by other modules
+
+### Naming
+
+| Entity | Convention | Example |
+|--------|-----------|---------|
+| Component files | `PascalCase.tsx` | `ProfileForm.tsx`, `AppShell.tsx` |
+| Page files | `PascalCase` + `Page` suffix | `HistoryPage.tsx`, `PyramidPage.tsx` |
+| DB operation files | `lowercase.ts` (singular noun) | `profile.ts`, `sessions.ts` |
+| Test files | Co-located, `.test.ts` suffix | `profile.test.ts`, `utils.test.ts` |
+| Utility files | `lowercase.ts` | `utils.ts`, `tables.ts`, `date.ts` |
+| Components | PascalCase | `LocationSelector`, `ClimbEntryForm` |
+| Hooks | `use` prefix, camelCase | `useDb`, `useDbRequired` |
+| DB functions | verb-first camelCase | `getProfile`, `createSession`, `listLocations`, `isLocationInUse` |
+| Event handlers | `handle` prefix | `handleSubmit`, `handleDelete`, `handleSave` |
+| Constants | `UPPER_SNAKE_CASE` | `FRENCH_GRADES`, `SPORT_SYSTEMS`, `EMPTY_CLIMB` |
+| DB column names / interfaces | `snake_case` (mirrors SQLite) | `display_name`, `grade_system`, `location_id` |
+| Types / Interfaces | PascalCase | `Profile`, `SessionInput`, `ClimbFormData`, `GradeSystem` |
+| Props interfaces | PascalCase + `Props` | `ProfileFormProps`, `GradeSelectorProps` |
 
 ### Types
 
-| Type | When to use |
-|------|-------------|
-| `feat` | A new feature |
-| `fix` | A bug fix |
-| `docs` | Documentation-only changes |
-| `style` | Formatting, missing semicolons, etc. (no code logic change) |
-| `refactor` | Code change that neither fixes a bug nor adds a feature |
-| `perf` | Performance improvement |
-| `test` | Adding or updating tests |
-| `build` | Changes to build system or dependencies |
-| `ci` | CI/CD configuration changes |
-| `chore` | Maintenance tasks that don't modify src or test files |
+- Prefer `interface` for all data shapes and props
+- Use `type` only for union types / aliases (`type GradeSystem = "french" | "yds" | ...`)
+- Co-locate interfaces with their operations (e.g., `Profile` interface in `profile.ts`)
+- Form data uses all-string fields (`ProfileFormData`); conversion to DB types happens in submit handlers
 
-### Rules
+### State Management
 
-1. **Use lowercase** for the type and description.
-2. **Keep the subject line under 72 characters.**
-3. **Use imperative mood** in the description (e.g., "add feature" not "added feature").
-4. **Scope is optional** but encouraged when the change targets a specific module or area (e.g., `feat(auth): add login flow`).
-5. **Breaking changes** must include `BREAKING CHANGE:` in the footer or `!` after the type/scope (e.g., `feat!: remove legacy API`).
-6. **One logical change per commit.** Do not bundle unrelated changes.
+- No external state library. React hooks only (`useState`, `useEffect`, `useMemo`, `useCallback`)
+- Database access via `useDb()` context hook — returns `{ db, isLoading, error, persist }`
+- Read pattern: call DB operations synchronously during render (`const sessions = listSessions(db, filters)`)
+- Write pattern: mutate → persist → force refresh:
+  ```typescript
+  deleteSession(db, id);
+  await persist();
+  forceRefresh();
+  ```
+- Force-refresh trick: `const [, setRefresh] = useState(0); const forceRefresh = useCallback(() => setRefresh(n => n + 1), []);`
+
+### Error Handling
+
+- DB provider catches initialization errors and exposes via `error` state; `AppShell` renders error UI
+- DB operations do NOT use try/catch — they throw on failure, return `null` for not-found
+- Components use early-return guards: `if (!db) return null;`
+- User-facing errors via toast: `toast({ title: t("location.inUse"), variant: "destructive" })`
+- Persistence layer uses `try/catch` with `return null` for graceful degradation (OPFS/IndexedDB)
+
+## File Organization
+
+```
+src/
+├── main.tsx                    # Entry point
+├── App.tsx                     # Root (DbProvider + HashRouter + AppShell)
+├── index.css                   # Tailwind directives + CSS variables
+├── components/                 # Reusable UI components
+│   ├── layout/                 #   AppLayout, AppNav
+│   ├── ui/                     #   shadcn/ui primitives (generated, not hand-written)
+│   └── *.tsx                   #   Feature components (ProfileForm, GradeSelector, etc.)
+├── pages/                      # Route-level page components (flat, no nesting)
+├── db/                         # Database layer
+│   ├── provider.tsx            #   React context (useDb, DbProvider)
+│   ├── init.ts                 #   sql.js WASM initialization
+│   ├── persistence.ts          #   OPFS / IndexedDB storage
+│   ├── export-import.ts        #   File download/upload + backup reminders
+│   ├── migrations/             #   Schema versioning (runner.ts, v1.ts + tests)
+│   └── operations/             #   CRUD per entity (profile, sessions, locations, pyramid + tests)
+├── grades/                     # Grade domain logic (pure, no React)
+│   ├── tables.ts               #   Static grade data + types
+│   └── utils.ts                #   Comparison, sorting, formatting
+├── lib/                        # General utilities (cn(), formatDate)
+├── i18n/                       # i18next config + pl.json + en.json
+└── test/                       # Test infrastructure (setup, db-helper)
+```
+
+Tests are co-located with source files. Domain logic (`grades/`, `db/operations/`) is pure — no React dependencies.
+
+## Testing Approach
+
+- **TDD for data/logic layer**: grade utils, DB CRUD, migrations, pyramid queries
+- **No automated tests for UI components** — verified manually
+- Tests use in-memory SQLite via `createTestDb()` from `src/test/db-helper.ts`
+- Test structure: `describe` per module → `beforeEach` creates fresh DB + runs migrations → `afterEach` closes DB
+- Currently **75 tests across 8 test files**
+
+## i18n
+
+- Polish (`pl`) is the default language, English (`en`) is secondary
+- All user-visible text must use `t("key")` from `useTranslation()`
+- Translation keys use dot notation: `session.types.lead`, `climb.completionTypes.onsight`
+- Both `pl.json` and `en.json` must be updated together for any new UI text
+
+## Workflow: OpenSpec
+
+Non-trivial changes use [OpenSpec](https://github.com/openspec-dev/openspec). Commands: `/opsx-propose`, `/opsx-apply`, `/opsx-explore`, `/opsx-archive`. Propose before implementing. Mark tasks as you go. Archive when done.
+
+## Commits: Conventional Commits
+
+Format: `<type>[optional scope]: <description>`. Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`. Lowercase, imperative mood, under 72 chars. One logical change per commit.
