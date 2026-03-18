@@ -5,45 +5,52 @@
 - [ ] 1.3 Set up React Router with hash-based routing and base layout (nav, main content area)
 - [ ] 1.4 Set up react-i18next with Polish and English translation files (initial skeleton with common labels)
 - [ ] 1.5 Configure GitHub Pages deployment (vite config base path, gh-pages or GitHub Actions workflow)
+- [ ] 1.6 Configure Vitest with sql.js WASM support (test runner setup, in-memory DB helper for tests)
 
 ## 2. Database Layer
 
 - [ ] 2.1 Integrate sql.js — load WASM, initialize empty database, create DB context/provider for React
-- [ ] 2.2 Implement schema v1 migration — create tables: profile, sessions, climbs, locations, schema_version
-- [ ] 2.3 Implement migration runner — check schema_version on startup, run pending migrations sequentially
-- [ ] 2.4 Implement OPFS persistence — save database to OPFS after every mutation, load on startup
-- [ ] 2.5 Implement IndexedDB fallback — detect OPFS support, fall back to IndexedDB when unavailable
-- [ ] 2.6 Implement export — download current database as `climbing-journal-YYYY-MM-DD.sqlite`
-- [ ] 2.7 Implement import — upload .sqlite file, validate it's a valid SQLite DB, confirm replacement, load and persist
-- [ ] 2.8 Implement backup reminder — track last export date, show dismissible notification if >14 days
+- [ ] 2.2 Write tests for schema v1 migration (table existence, column types, constraints, foreign keys)
+- [ ] 2.3 Implement schema v1 migration — create tables: profile, sessions, climbs, locations, schema_version
+- [ ] 2.4 Write tests for migration runner (version check, sequential execution, idempotency, upgrade-on-import)
+- [ ] 2.5 Implement migration runner — check schema_version on startup, run pending migrations sequentially
+- [ ] 2.6 Implement OPFS persistence — save database to OPFS after every mutation, load on startup
+- [ ] 2.7 Implement IndexedDB fallback — detect OPFS support, fall back to IndexedDB when unavailable
+- [ ] 2.8 Implement export — download current database as `climbing-journal-YYYY-MM-DD.sqlite`
+- [ ] 2.9 Implement import — upload .sqlite file, validate it's a valid SQLite DB, confirm replacement, load and persist
+- [ ] 2.10 Implement backup reminder — track last export date, show dismissible notification if >14 days
 
 ## 3. Grade System
 
 - [ ] 3.1 Define grade ordering tables for all 4 systems (French, YDS, V-scale, Font) as static data
-- [ ] 3.2 Create grade utility functions — comparison, sorting, display formatting
-- [ ] 3.3 Create GradeSelector component — grade system dropdown + grade value dropdown, filtered by climbing style (sport systems for lead/toprope, boulder systems for boulder)
+- [ ] 3.2 Write tests for grade comparison, sorting, and display formatting (all 4 systems, edge cases like 6a+ vs 6b, V0 vs V1)
+- [ ] 3.3 Implement grade utility functions — comparison, sorting, display formatting (make tests pass)
+- [ ] 3.4 Create GradeSelector component — grade system dropdown + grade value dropdown, filtered by climbing style (sport systems for lead/toprope, boulder systems for boulder)
 
 ## 4. Climber Profile
 
-- [ ] 4.1 Create profile database operations (CRUD for single profile row)
-- [ ] 4.2 Create profile setup screen — shown on first visit when no profile exists
-- [ ] 4.3 Create profile edit page — accessible from settings/nav, editable fields with save
-- [ ] 4.4 Wire locale preference to react-i18next — changing locale in profile switches app language
+- [ ] 4.1 Write tests for profile database operations (create, read, update, single-row constraint)
+- [ ] 4.2 Implement profile database operations (CRUD for single profile row)
+- [ ] 4.3 Create profile setup screen — shown on first visit when no profile exists
+- [ ] 4.4 Create profile edit page — accessible from settings/nav, editable fields with save
+- [ ] 4.5 Wire locale preference to react-i18next — changing locale in profile switches app language
 
 ## 5. Location Management
 
-- [ ] 5.1 Create location database operations (CRUD, list all, check if referenced by sessions)
-- [ ] 5.2 Create locations management page — list all locations, add new, edit, delete (with protection for in-use locations)
-- [ ] 5.3 Create LocationSelector component — dropdown for session form, with inline quick-add option
+- [ ] 5.1 Write tests for location database operations (CRUD, list all, deletion protection when referenced by sessions)
+- [ ] 5.2 Implement location database operations (CRUD, list all, check if referenced by sessions)
+- [ ] 5.3 Create locations management page — list all locations, add new, edit, delete (with protection for in-use locations)
+- [ ] 5.4 Create LocationSelector component — dropdown for session form, with inline quick-add option
 
 ## 6. Session Logging
 
-- [ ] 6.1 Create session database operations (create, read, update, delete session with associated climbs)
-- [ ] 6.2 Create session form page — date, location selector, type, duration, energy (1-5), satisfaction (1-5), notes
-- [ ] 6.3 Create climb entry sub-form — route name, grade selector, style, completion type, attempts, perceived difficulty, notes
-- [ ] 6.4 Wire climb entries into session form — add/remove/reorder climbs within session, save all together
-- [ ] 6.5 Create session detail view — display full session with all climb entries
-- [ ] 6.6 Create session edit mode — reuse session form pre-filled with existing data, save updates
+- [ ] 6.1 Write tests for session database operations (create/read/update/delete session with climbs, cascade delete, climb ordering)
+- [ ] 6.2 Implement session database operations (create, read, update, delete session with associated climbs)
+- [ ] 6.3 Create session form page — date, location selector, type, duration, energy (1-5), satisfaction (1-5), notes
+- [ ] 6.4 Create climb entry sub-form — route name, grade selector, style, completion type, attempts, perceived difficulty, notes
+- [ ] 6.5 Wire climb entries into session form — add/remove/reorder climbs within session, save all together
+- [ ] 6.6 Create session detail view — display full session with all climb entries
+- [ ] 6.7 Create session edit mode — reuse session form pre-filled with existing data, save updates
 
 ## 7. Session History
 
@@ -56,11 +63,12 @@
 
 ## 8. Grade Pyramid
 
-- [ ] 8.1 Create grade pyramid data query — aggregate climb counts by grade, with filters for time range, style, completion type
-- [ ] 8.2 Create grade pyramid chart component using Recharts — horizontal bar chart, grades on Y-axis, counts on X-axis
-- [ ] 8.3 Add time range selector — predefined choices (month, 3 months, 6 months, year, all time), default all time
-- [ ] 8.4 Add style filter — lead / boulder / all (when "all", separate lead and boulder grades into sections)
-- [ ] 8.5 Add completion type checkboxes — onsight, flash, redpoint, repeat, attempt (all checked by default)
+- [ ] 8.1 Write tests for grade pyramid aggregation query (fixture data, test each filter dimension: time range, style, completion type, and combinations)
+- [ ] 8.2 Implement grade pyramid data query — aggregate climb counts by grade, with filters for time range, style, completion type
+- [ ] 8.3 Create grade pyramid chart component using Recharts — horizontal bar chart, grades on Y-axis, counts on X-axis
+- [ ] 8.4 Add time range selector — predefined choices (month, 3 months, 6 months, year, all time), default all time
+- [ ] 8.5 Add style filter — lead / boulder / all (when "all", separate lead and boulder grades into sections)
+- [ ] 8.6 Add completion type checkboxes — onsight, flash, redpoint, repeat, attempt (all checked by default)
 
 ## 9. Internationalization Polish-up
 

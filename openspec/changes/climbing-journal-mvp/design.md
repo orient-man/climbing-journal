@@ -16,6 +16,7 @@ Key constraints:
 - Make data safe via export/import and auto-persistence
 - Support Polish and English from day one
 - Keep the architecture simple enough for a single developer to maintain
+- Keep the data layer correct through automated tests — grade ordering, DB operations, migrations, and aggregation queries must be test-driven
 
 **Non-Goals:**
 - Server-side rendering or API routes
@@ -84,6 +85,22 @@ Key constraints:
 
 **Rationale**: The schema will evolve as features are added. Browser SQLite doesn't have built-in migration tooling, so we need a simple version-check-and-migrate pattern. This also helps when importing an older .sqlite backup.
 
+### 10. Pragmatic TDD for data and logic layers
+**Decision**: Use test-driven development for the data and logic layer — grade system, database CRUD operations, migration runner, and aggregation queries. UI components are not required to have automated tests. Use Vitest as the test runner.
+
+**Rationale**: The data layer is where bugs are most damaging (data loss, incorrect grade pyramids, broken migrations) and hardest to catch through manual testing. Grade comparison has subtle ordering rules across 4 systems. Aggregation queries have combinatorial filter interactions. These are pure-logic units with well-defined inputs and outputs — ideal TDD candidates. Writing tests first forces clear API design before implementation. UI components, in contrast, are better verified through manual testing and the end-to-end integration flow.
+
+**Scope**:
+- **Test-first**: Grade ordering/comparison/sorting utilities, database CRUD operations (profile, sessions, climbs, locations), migration runner (version check, sequential execution, upgrade-on-import), grade pyramid aggregation queries (all filter combinations)
+- **Test runner**: Vitest (pairs with Vite, supports ESM and TypeScript natively, fast watch mode)
+- **DB in tests**: sql.js runs in Node.js — same WASM engine as the browser, no mocking needed. Tests create an in-memory database, run migrations, and assert against real SQL.
+- **Not tested**: React components, form wiring, navigation, i18n configuration, OPFS/IndexedDB persistence (browser-specific APIs)
+
+**Alternatives considered**:
+- Strict TDD everywhere including UI components — too slow for a solo MVP, produces brittle tests coupled to rendering implementation
+- Test-after only — loses the design benefits of writing tests first, tends to get skipped under time pressure
+- No automated tests — unacceptable for the data layer where bugs mean silent data corruption or loss
+
 ## Risks / Trade-offs
 
 **[Browser storage eviction]** → Browsers can clear OPFS/IndexedDB under storage pressure (low disk, incognito mode). → **Mitigation**: Prominent export/backup feature. Consider periodic reminder to export. Never rely solely on browser storage for irreplaceable data.
@@ -97,3 +114,5 @@ Key constraints:
 **[Grade system complexity]** → Supporting 4 grade systems adds complexity to sorting, display, and input. → **Mitigation**: Start with French as default (matching the primary user's context). Other systems are supported but French gets the most polish. Grade ordering tables are static data, not algorithmic.
 
 **[Single-browser lock-in]** → Data lives in one browser on one device. No sync. → **Mitigation**: Export/import .sqlite file. This is acceptable for MVP. Sync is a future concern.
+
+**[No UI-level test coverage]** → UI components and interactions are not covered by automated tests. Bugs in form wiring, navigation, or rendering are caught only during manual testing. → **Mitigation**: The full integration flow (task 10.5) exercises the critical path end-to-end. UI tests can be added later if the project grows.
