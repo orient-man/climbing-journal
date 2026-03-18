@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import GradeSelector from "@/components/GradeSelector";
+import HelpPopover from "@/components/HelpPopover";
 import type { GradeSystem } from "@/grades/tables";
 
 export interface ProfileFormData {
@@ -103,7 +104,17 @@ export default function ProfileForm({
       </div>
 
       <div className="space-y-2">
-        <Label>{t("profile.currentLeadGrade")}</Label>
+        <Label className="flex items-center gap-1">
+          {t("profile.currentLeadGrade")}
+          <HelpPopover
+            items={[
+              { term: t("grade.systems.french"), description: t("help.gradeSystems.french") },
+              { term: t("grade.systems.yds"), description: t("help.gradeSystems.yds") },
+              { term: t("grade.systems.vscale"), description: t("help.gradeSystems.vscale") },
+              { term: t("grade.systems.font"), description: t("help.gradeSystems.font") },
+            ]}
+          />
+        </Label>
         <GradeSelector
           style="lead"
           system={form.current_lead_grade_system as GradeSystem | ""}
@@ -118,7 +129,17 @@ export default function ProfileForm({
       </div>
 
       <div className="space-y-2">
-        <Label>{t("profile.currentBoulderGrade")}</Label>
+        <Label className="flex items-center gap-1">
+          {t("profile.currentBoulderGrade")}
+          <HelpPopover
+            items={[
+              { term: t("grade.systems.french"), description: t("help.gradeSystems.french") },
+              { term: t("grade.systems.yds"), description: t("help.gradeSystems.yds") },
+              { term: t("grade.systems.vscale"), description: t("help.gradeSystems.vscale") },
+              { term: t("grade.systems.font"), description: t("help.gradeSystems.font") },
+            ]}
+          />
+        </Label>
         <GradeSelector
           style="boulder"
           system={form.current_boulder_grade_system as GradeSystem | ""}
@@ -133,7 +154,17 @@ export default function ProfileForm({
       </div>
 
       <div className="space-y-2">
-        <Label>{t("profile.goalGrade")}</Label>
+        <Label className="flex items-center gap-1">
+          {t("profile.goalGrade")}
+          <HelpPopover
+            items={[
+              { term: t("grade.systems.french"), description: t("help.gradeSystems.french") },
+              { term: t("grade.systems.yds"), description: t("help.gradeSystems.yds") },
+              { term: t("grade.systems.vscale"), description: t("help.gradeSystems.vscale") },
+              { term: t("grade.systems.font"), description: t("help.gradeSystems.font") },
+            ]}
+          />
+        </Label>
         <GradeSelector
           style="lead"
           system={form.goal_grade_system as GradeSystem | ""}

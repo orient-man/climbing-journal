@@ -155,5 +155,31 @@
     "reminderTitle": "Kopia zapasowa",
     "reminderMessage": "Minęło ponad 14 dni od ostatniego eksportu danych.",
     "exportNow": "Eksportuj teraz"
+  },
+  "help": {
+    "completionTypes": {
+      "onsight": "Pierwsza próba, bez wiedzy o drodze",
+      "flash": "Pierwsza próba, ze znajomością drogi (obserwacja, beta)",
+      "redpoint": "Czyste przejście po wcześniejszych próbach",
+      "repeat": "Droga przejdzona wcześniej",
+      "attempt": "Nie ukończono drogi"
+    },
+    "styles": {
+      "lead": "Wspinaczka od dołu, wpinanie się do ekspresów",
+      "boulder": "Krótkie, mocne problemy bez liny",
+      "toprope": "Lina zamocowana na górze drogi"
+    },
+    "sessionTypes": {
+      "lead": "Sesja skupiona na wspinaczce z liną (lead)",
+      "boulder": "Sesja skupiona na boulderingu",
+      "toprope": "Sesja skupiona na wspinaczce z górną asekuracją",
+      "mixed": "Sesja łącząca różne style wspinaczki"
+    },
+    "gradeSystems": {
+      "french": "Europejska skala sportowa (np. 6a, 7b+)",
+      "yds": "Amerykański system dziesiętny (np. 5.10a, 5.12c)",
+      "vscale": "Amerykańska skala boulderowa (np. V3, V8)",
+      "font": "Skala Fontainebleau dla boulderingu (np. 6a, 7c+)"
+    }
   }
 }

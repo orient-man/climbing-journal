@@ -155,5 +155,31 @@
     "reminderTitle": "Backup Reminder",
     "reminderMessage": "It's been over 14 days since your last data export.",
     "exportNow": "Export Now"
+  },
+  "help": {
+    "completionTypes": {
+      "onsight": "First try, no prior knowledge of the route",
+      "flash": "First try, with prior knowledge (watched someone, read beta)",
+      "redpoint": "Clean send after previous attempts",
+      "repeat": "Already sent this route before",
+      "attempt": "Did not complete the route"
+    },
+    "styles": {
+      "lead": "Climbing from below, clipping quickdraws as you go",
+      "boulder": "Short, powerful climbs without a rope",
+      "toprope": "Rope is pre-anchored at the top of the route"
+    },
+    "sessionTypes": {
+      "lead": "Session focused on lead climbing",
+      "boulder": "Session focused on bouldering",
+      "toprope": "Session focused on top rope climbing",
+      "mixed": "Session combining multiple climbing styles"
+    },
+    "gradeSystems": {
+      "french": "European sport climbing scale (e.g. 6a, 7b+)",
+      "yds": "US Yosemite Decimal System (e.g. 5.10a, 5.12c)",
+      "vscale": "US bouldering scale (e.g. V3, V8)",
+      "font": "Fontainebleau bouldering scale (e.g. 6a, 7c+)"
+    }
   }
 }

@@ -11,6 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import GradeSelector from "@/components/GradeSelector";
+import HelpPopover from "@/components/HelpPopover";
 import type { GradeSystem } from "@/grades/tables";
 import { Trash2, GripVertical } from "lucide-react";
 
@@ -87,7 +88,16 @@ export default function ClimbEntryForm({
           />
         </div>
         <div className="space-y-2">
-          <Label>{t("climb.style")}</Label>
+          <Label className="flex items-center gap-1">
+            {t("climb.style")}
+            <HelpPopover
+              items={[
+                { term: t("climb.styles.lead"), description: t("help.styles.lead") },
+                { term: t("climb.styles.boulder"), description: t("help.styles.boulder") },
+                { term: t("climb.styles.toprope"), description: t("help.styles.toprope") },
+              ]}
+            />
+          </Label>
           <Select
             value={data.style}
             onValueChange={(v) =>
@@ -111,7 +121,17 @@ export default function ClimbEntryForm({
       </div>
 
       <div className="space-y-2">
-        <Label>{t("climb.grade")}</Label>
+        <Label className="flex items-center gap-1">
+          {t("climb.grade")}
+          <HelpPopover
+            items={[
+              { term: t("grade.systems.french"), description: t("help.gradeSystems.french") },
+              { term: t("grade.systems.yds"), description: t("help.gradeSystems.yds") },
+              { term: t("grade.systems.vscale"), description: t("help.gradeSystems.vscale") },
+              { term: t("grade.systems.font"), description: t("help.gradeSystems.font") },
+            ]}
+          />
+        </Label>
         <GradeSelector
           style={gradeStyle}
           system={data.grade_system as GradeSystem | ""}
@@ -123,7 +143,18 @@ export default function ClimbEntryForm({
 
       <div className="grid grid-cols-3 gap-4">
         <div className="space-y-2">
-          <Label>{t("climb.completionType")}</Label>
+          <Label className="flex items-center gap-1">
+            {t("climb.completionType")}
+            <HelpPopover
+              items={[
+                { term: t("climb.completionTypes.onsight"), description: t("help.completionTypes.onsight") },
+                { term: t("climb.completionTypes.flash"), description: t("help.completionTypes.flash") },
+                { term: t("climb.completionTypes.redpoint"), description: t("help.completionTypes.redpoint") },
+                { term: t("climb.completionTypes.repeat"), description: t("help.completionTypes.repeat") },
+                { term: t("climb.completionTypes.attempt"), description: t("help.completionTypes.attempt") },
+              ]}
+            />
+          </Label>
           <Select
             value={data.completion_type}
             onValueChange={(v) => onChange({ ...data, completion_type: v })}

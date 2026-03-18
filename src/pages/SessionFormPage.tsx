@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/select";
 import { toast } from "@/components/ui/use-toast";
 import LocationSelector from "@/components/LocationSelector";
+import HelpPopover from "@/components/HelpPopover";
 import ClimbEntryForm, {
   type ClimbFormData,
   EMPTY_CLIMB,
@@ -153,7 +154,17 @@ export default function SessionFormPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label>{t("session.type")}</Label>
+                <Label className="flex items-center gap-1">
+                  {t("session.type")}
+                  <HelpPopover
+                    items={[
+                      { term: t("session.types.lead"), description: t("help.sessionTypes.lead") },
+                      { term: t("session.types.boulder"), description: t("help.sessionTypes.boulder") },
+                      { term: t("session.types.toprope"), description: t("help.sessionTypes.toprope") },
+                      { term: t("session.types.mixed"), description: t("help.sessionTypes.mixed") },
+                    ]}
+                  />
+                </Label>
                 <Select value={type} onValueChange={setType}>
                   <SelectTrigger>
                     <SelectValue />
