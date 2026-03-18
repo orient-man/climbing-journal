@@ -1,0 +1,149 @@
+{
+  "common": {
+    "appName": "Dziennik Wspinaczkowy",
+    "save": "Zapisz",
+    "cancel": "Anuluj",
+    "delete": "Usuń",
+    "edit": "Edytuj",
+    "add": "Dodaj",
+    "back": "Wstecz",
+    "confirm": "Potwierdź",
+    "close": "Zamknij",
+    "loading": "Ładowanie...",
+    "noData": "Brak danych",
+    "required": "Wymagane",
+    "optional": "Opcjonalne",
+    "yes": "Tak",
+    "no": "Nie"
+  },
+  "nav": {
+    "dashboard": "Panel",
+    "logSession": "Nowa sesja",
+    "history": "Historia",
+    "pyramid": "Piramida",
+    "locations": "Miejsca",
+    "profile": "Profil"
+  },
+  "session": {
+    "title": "Sesja wspinaczkowa",
+    "date": "Data",
+    "location": "Miejsce",
+    "type": "Typ",
+    "duration": "Czas trwania (min)",
+    "energy": "Energia (1-5)",
+    "satisfaction": "Satysfakcja (1-5)",
+    "notes": "Notatki",
+    "climbs": "Wspinaczki",
+    "addClimb": "Dodaj wspinaczkę",
+    "noClimbs": "Brak wspinaczek",
+    "deleteConfirm": "Czy na pewno chcesz usunąć tę sesję?",
+    "types": {
+      "lead": "Lead",
+      "boulder": "Boulder",
+      "toprope": "Top rope",
+      "mixed": "Mieszana"
+    }
+  },
+  "climb": {
+    "routeName": "Nazwa drogi",
+    "grade": "Wycena",
+    "style": "Styl",
+    "completionType": "Typ ukończenia",
+    "attempts": "Próby",
+    "perceivedDifficulty": "Odczuwalna trudność (1-5)",
+    "notes": "Notatki",
+    "completionTypes": {
+      "onsight": "Onsight",
+      "flash": "Flash",
+      "redpoint": "Redpoint",
+      "repeat": "Powtórzenie",
+      "attempt": "Próba"
+    },
+    "styles": {
+      "lead": "Lead",
+      "boulder": "Boulder",
+      "toprope": "Top rope"
+    }
+  },
+  "grade": {
+    "system": "System wyceny",
+    "value": "Wycena",
+    "systems": {
+      "french": "Francuski",
+      "yds": "YDS",
+      "vscale": "V-skala",
+      "font": "Font"
+    }
+  },
+  "location": {
+    "title": "Miejsca wspinaczkowe",
+    "name": "Nazwa",
+    "type": "Typ",
+    "region": "Region",
+    "addNew": "Dodaj miejsce",
+    "deleteConfirm": "Czy na pewno chcesz usunąć to miejsce?",
+    "inUse": "Nie można usunąć — miejsce jest używane w sesjach",
+    "types": {
+      "gym": "Ścianka",
+      "crag": "Skała"
+    },
+    "empty": "Brak zapisanych miejsc. Dodaj swoje pierwsze miejsce wspinaczkowe."
+  },
+  "profile": {
+    "title": "Profil",
+    "setup": "Konfiguracja profilu",
+    "setupDesc": "Wypełnij swój profil, aby rozpocząć",
+    "displayName": "Imię",
+    "birthYear": "Rok urodzenia",
+    "climbingSince": "Wspina się od (rok)",
+    "currentLeadGrade": "Obecna wycena (lead)",
+    "currentBoulderGrade": "Obecna wycena (boulder)",
+    "goalGrade": "Wycena docelowa",
+    "otherActivities": "Inne aktywności",
+    "knownInjuries": "Znane kontuzje",
+    "locale": "Język"
+  },
+  "history": {
+    "title": "Historia sesji",
+    "empty": "Brak sesji. Zaloguj swoją pierwszą sesję wspinaczkową!",
+    "filters": {
+      "dateRange": "Zakres dat",
+      "location": "Miejsce",
+      "type": "Typ sesji",
+      "allTime": "Cały czas",
+      "lastMonth": "Ostatni miesiąc",
+      "last3Months": "Ostatnie 3 miesiące",
+      "last6Months": "Ostatnie 6 miesięcy",
+      "lastYear": "Ostatni rok",
+      "allLocations": "Wszystkie miejsca",
+      "allTypes": "Wszystkie typy"
+    }
+  },
+  "pyramid": {
+    "title": "Piramida stopni",
+    "empty": "Brak danych do wyświetlenia piramidy. Zaloguj wspinaczki, aby zobaczyć swoją piramidę.",
+    "filters": {
+      "timeRange": "Zakres czasu",
+      "style": "Styl",
+      "completionType": "Typ ukończenia",
+      "allStyles": "Wszystkie style"
+    }
+  },
+  "dashboard": {
+    "title": "Panel",
+    "welcome": "Witaj w Dzienniku Wspinaczkowym",
+    "totalSessions": "Sesje łącznie",
+    "totalClimbs": "Wspinaczki łącznie",
+    "maxGrade": "Najwyższa wycena",
+    "recentSessions": "Ostatnie sesje",
+    "logNew": "Zaloguj nową sesję"
+  },
+  "data": {
+    "export": "Eksportuj bazę",
+    "import": "Importuj bazę",
+    "importConfirm": "Uwaga: import zastąpi wszystkie obecne dane. Czy kontynuować?",
+    "importError": "Plik nie jest poprawną bazą danych SQLite",
+    "exportSuccess": "Baza danych wyeksportowana pomyślnie",
+    "backupReminder": "Minęło ponad 14 dni od ostatniego eksportu. Zalecamy wykonanie kopii zapasowej."
+  }
+}
