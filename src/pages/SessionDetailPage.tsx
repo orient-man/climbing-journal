@@ -5,10 +5,11 @@ import { getSession } from "@/db/operations/sessions";
 import { getLocation } from "@/db/operations/locations";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { formatDate } from "@/lib/date";
 import { Pencil, ArrowLeft } from "lucide-react";
 
 export default function SessionDetailPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { db } = useDb();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -46,7 +47,7 @@ export default function SessionDetailPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>{session.date}</CardTitle>
+          <CardTitle>{formatDate(session.date, i18n.language)}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           <div className="grid grid-cols-2 gap-4 text-sm">

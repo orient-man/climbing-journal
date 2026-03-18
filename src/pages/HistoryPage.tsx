@@ -22,6 +22,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { toast } from "@/components/ui/use-toast";
+import { formatDate } from "@/lib/date";
 import { Calendar, Clock, Mountain, Trash2 } from "lucide-react";
 
 function getDateFrom(range: string): string | undefined {
@@ -40,7 +41,7 @@ function getDateFrom(range: string): string | undefined {
 }
 
 export default function HistoryPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { db, persist } = useDb();
   const [dateRange, setDateRange] = useState("all");
   const [locationFilter, setLocationFilter] = useState("all");
@@ -153,7 +154,7 @@ export default function HistoryPage() {
                       className="flex-1 space-y-1"
                     >
                       <div className="flex items-center gap-3">
-                        <span className="font-medium">{session.date}</span>
+                        <span className="font-medium">{formatDate(session.date, i18n.language)}</span>
                         <span className="text-sm px-2 py-0.5 rounded-full bg-primary/10 text-primary">
                           {t(`session.types.${session.type}`)}
                         </span>
@@ -168,7 +169,7 @@ export default function HistoryPage() {
                         {session.duration_minutes && (
                           <span className="flex items-center gap-1">
                             <Clock className="h-3 w-3" />
-                            {session.duration_minutes} min
+                            {session.duration_minutes} {t("common.min")}
                           </span>
                         )}
                         <span className="flex items-center gap-1">
@@ -178,7 +179,7 @@ export default function HistoryPage() {
                         </span>
                         {session.highest_grade_value && (
                           <span className="font-mono">
-                            max: {session.highest_grade_value}
+                            {t("session.maxGrade")}: {session.highest_grade_value}
                           </span>
                         )}
                       </div>

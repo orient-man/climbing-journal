@@ -1,4 +1,6 @@
 import type { Database } from "sql.js";
+import { compareGrades } from "@/grades/utils";
+import type { GradeSystem } from "@/grades/tables";
 
 export interface ClimbInput {
   route_name?: string;
@@ -154,9 +156,7 @@ export function listSessions(
 ): (Session & { climb_count: number; highest_grade_value: string | null; highest_grade_system: string | null })[] {
   let query = `
     SELECT s.*,
-      COUNT(c.id) as climb_count,
-      (SELECT c2.grade_value FROM climbs c2 WHERE c2.session_id = s.id ORDER BY c2.grade_value DESC LIMIT 1) as highest_grade_value,
-      (SELECT c2.grade_system FROM climbs c2 WHERE c2.session_id = s.id ORDER BY c2.grade_value DESC LIMIT 1) as highest_grade_system
+      COUNT(c.id) as climb_count
     FROM sessions s
     LEFT JOIN climbs c ON c.session_id = s.id
   `;
@@ -191,9 +191,47 @@ export function listSessions(
   if (result.length === 0) return [];
 
   const cols = result[0].columns;
-  return result[0].values.map((row) => {
+  const sessions = result[0].values.map((row) => {
     const session: Record<string, unknown> = {};
     cols.forEach((col, i) => { session[col] = row[i]; });
-    return session as unknown as Session & { climb_count: number; highest_grade_value: string | null; highest_grade_system: string | null };
+    return session as unknown as Session & { climb_count: number };
+  });
+
+  // Compute highest grade per session using grade comparison logic
+  return sessions.map((session) => {
+    const climbsResult = db.exec(
+      "SELECT grade_system, grade_value FROM climbs WHERE session_id = ? AND grade_value IS NOT NULL AND grade_value != ''",
+      [session.id]
+    );
+
+    let highest_grade_value: string | null = null;
+    let highest_grade_system: string | null = null;
+
+    if (climbsResult.length > 0 && climbsResult[0].values.length > 0) {
+      for (const climbRow of climbsResult[0].values) {
+        const sys = climbRow[0] as string | null;
+        const val = climbRow[1] as string | null;
+        if (!sys || !val) continue;
+
+        if (!highest_grade_value || !highest_grade_system) {
+          highest_grade_system = sys;
+          highest_grade_value = val;
+        } else if (sys === highest_grade_system) {
+          const cmp = compareGrades(
+            { system: sys as GradeSystem, value: val },
+            { system: highest_grade_system as GradeSystem, value: highest_grade_value }
+          );
+          if (cmp > 0) {
+            highest_grade_system = sys;
+            highest_grade_value = val;
+          }
+        } else {
+          // Different grade systems — keep whichever was found first
+          // (cross-system comparison not meaningful)
+        }
+      }
+    }
+
+    return { ...session, highest_grade_value, highest_grade_system };
   });
 }

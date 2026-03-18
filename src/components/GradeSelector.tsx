@@ -50,7 +50,6 @@ export default function GradeSelector({
           value={system}
           onValueChange={(val) => {
             onSystemChange(val as GradeSystem);
-            onValueChange(""); // Reset value when system changes
           }}
         >
           <SelectTrigger className="w-full">

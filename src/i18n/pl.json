@@ -14,7 +14,9 @@
     "required": "Wymagane",
     "optional": "Opcjonalne",
     "yes": "Tak",
-    "no": "Nie"
+    "no": "Nie",
+    "min": "min",
+    "error": "Błąd"
   },
   "nav": {
     "dashboard": "Panel",
@@ -37,6 +39,7 @@
     "addClimb": "Dodaj wspinaczkę",
     "noClimbs": "Brak wspinaczek",
     "deleteConfirm": "Czy na pewno chcesz usunąć tę sesję?",
+    "maxGrade": "maks",
     "types": {
       "lead": "Lead",
       "boulder": "Boulder",
@@ -127,7 +130,9 @@
       "style": "Styl",
       "completionType": "Typ ukończenia",
       "allStyles": "Wszystkie style"
-    }
+    },
+    "leadTopRope": "Lead / Top Rope",
+    "boulder": "Boulder"
   },
   "dashboard": {
     "title": "Panel",
@@ -145,5 +150,10 @@
     "importError": "Plik nie jest poprawną bazą danych SQLite",
     "exportSuccess": "Baza danych wyeksportowana pomyślnie",
     "backupReminder": "Minęło ponad 14 dni od ostatniego eksportu. Zalecamy wykonanie kopii zapasowej."
+  },
+  "backup": {
+    "reminderTitle": "Kopia zapasowa",
+    "reminderMessage": "Minęło ponad 14 dni od ostatniego eksportu danych.",
+    "exportNow": "Eksportuj teraz"
   }
 }

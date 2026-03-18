@@ -253,8 +253,8 @@ export default function PyramidPage() {
         </Card>
       ) : (
         <div className="space-y-6">
-          {renderChart(data.lead, styleFilter === "all" ? "Lead / Top Rope" : t(`climb.styles.${styleFilter}`))}
-          {renderChart(data.boulder, styleFilter === "all" ? "Boulder" : "")}
+          {renderChart(data.lead, styleFilter === "all" ? t("pyramid.leadTopRope") : t(`climb.styles.${styleFilter}`))}
+          {renderChart(data.boulder, styleFilter === "all" ? t("pyramid.boulder") : "")}
         </div>
       )}
     </div>

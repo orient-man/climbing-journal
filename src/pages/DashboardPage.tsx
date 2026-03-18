@@ -1,10 +1,17 @@
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDb } from "@/db/provider";
 import { listSessions } from "@/db/operations/sessions";
+import {
+  shouldShowBackupReminder,
+  isBackupReminderDismissed,
+  dismissBackupReminder,
+} from "@/db/export-import";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { toast } from "@/components/ui/use-toast";
+import { ToastAction } from "@/components/ui/toast";
 import { formatDate } from "@/lib/date";
 import {
   PlusCircle,
@@ -16,6 +23,25 @@ import {
 export default function DashboardPage() {
   const { t, i18n } = useTranslation();
   const { db } = useDb();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (shouldShowBackupReminder() && !isBackupReminderDismissed()) {
+      dismissBackupReminder();
+      toast({
+        title: t("backup.reminderTitle"),
+        description: t("backup.reminderMessage"),
+        action: (
+          <ToastAction
+            altText={t("backup.exportNow")}
+            onClick={() => navigate("/profile")}
+          >
+            {t("backup.exportNow")}
+          </ToastAction>
+        ),
+      });
+    }
+  }, [t, navigate]);
 
   const stats = useMemo(() => {
     if (!db) return null;

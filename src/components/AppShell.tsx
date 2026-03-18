@@ -40,7 +40,7 @@ export default function AppShell() {
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-destructive">Error: {error}</div>
+        <div className="text-destructive">{t("common.error")}: {error}</div>
       </div>
     );
   }

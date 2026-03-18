@@ -116,7 +116,7 @@ export default function ClimbEntryForm({
           style={gradeStyle}
           system={data.grade_system as GradeSystem | ""}
           value={data.grade_value}
-          onSystemChange={(s) => onChange({ ...data, grade_system: s })}
+          onSystemChange={(s) => onChange({ ...data, grade_system: s, grade_value: "" })}
           onValueChange={(v) => onChange({ ...data, grade_value: v })}
         />
       </div>

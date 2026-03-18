@@ -109,7 +109,7 @@ export default function ProfileForm({
           system={form.current_lead_grade_system as GradeSystem | ""}
           value={form.current_lead_grade_value}
           onSystemChange={(s) =>
-            setForm((f) => ({ ...f, current_lead_grade_system: s }))
+            setForm((f) => ({ ...f, current_lead_grade_system: s, current_lead_grade_value: "" }))
           }
           onValueChange={(v) =>
             setForm((f) => ({ ...f, current_lead_grade_value: v }))
@@ -124,7 +124,7 @@ export default function ProfileForm({
           system={form.current_boulder_grade_system as GradeSystem | ""}
           value={form.current_boulder_grade_value}
           onSystemChange={(s) =>
-            setForm((f) => ({ ...f, current_boulder_grade_system: s }))
+            setForm((f) => ({ ...f, current_boulder_grade_system: s, current_boulder_grade_value: "" }))
           }
           onValueChange={(v) =>
             setForm((f) => ({ ...f, current_boulder_grade_value: v }))
@@ -139,7 +139,7 @@ export default function ProfileForm({
           system={form.goal_grade_system as GradeSystem | ""}
           value={form.goal_grade_value}
           onSystemChange={(s) =>
-            setForm((f) => ({ ...f, goal_grade_system: s }))
+            setForm((f) => ({ ...f, goal_grade_system: s, goal_grade_value: "" }))
           }
           onValueChange={(v) =>
             setForm((f) => ({ ...f, goal_grade_value: v }))
