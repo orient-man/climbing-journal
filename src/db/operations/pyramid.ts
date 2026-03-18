@@ -3,6 +3,7 @@ import type { Database } from "sql.js";
 export interface PyramidEntry {
   grade_system: string;
   grade_value: string;
+  style: string;
   count: number;
 }
 
@@ -18,7 +19,7 @@ export function getGradePyramidData(
   filters: PyramidFilters
 ): PyramidEntry[] {
   let query = `
-    SELECT c.grade_system, c.grade_value, COUNT(*) as count
+    SELECT c.grade_system, c.grade_value, c.style, COUNT(*) as count
     FROM climbs c
     JOIN sessions s ON c.session_id = s.id
     WHERE c.grade_system IS NOT NULL AND c.grade_value IS NOT NULL
@@ -44,7 +45,7 @@ export function getGradePyramidData(
     params.push(...filters.completionTypes);
   }
 
-  query += " GROUP BY c.grade_system, c.grade_value";
+  query += " GROUP BY c.grade_system, c.grade_value, c.style";
 
   const result = db.exec(query, params as (string | number | null)[]);
   if (result.length === 0) return [];
@@ -52,6 +53,7 @@ export function getGradePyramidData(
   return result[0].values.map((row) => ({
     grade_system: row[0] as string,
     grade_value: row[1] as string,
-    count: row[2] as number,
+    style: row[2] as string,
+    count: row[3] as number,
   }));
 }

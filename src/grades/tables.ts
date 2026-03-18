@@ -19,7 +19,7 @@ export interface Grade {
 export const SPORT_SYSTEMS: GradeSystem[] = ["french", "yds"];
 
 /** Bouldering systems */
-export const BOULDER_SYSTEMS: GradeSystem[] = ["vscale", "font"];
+export const BOULDER_SYSTEMS: GradeSystem[] = ["vscale", "font", "french"];
 
 /**
  * French sport climbing grades in ascending order.

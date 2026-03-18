@@ -6,7 +6,7 @@ import {
   type PyramidEntry,
 } from "@/db/operations/pyramid";
 import { sortGrades } from "@/grades/utils";
-import { SPORT_SYSTEMS, BOULDER_SYSTEMS, type GradeSystem, type Grade } from "@/grades/tables";
+import { type GradeSystem, type Grade } from "@/grades/tables";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import {
@@ -59,10 +59,11 @@ function getDateFrom(range: string): string | undefined {
 }
 
 function sortPyramidEntries(entries: PyramidEntry[]): PyramidEntry[] {
-  const grades: (Grade & { count: number })[] = entries.map((e) => ({
+  const grades: (Grade & { count: number; style: string })[] = entries.map((e) => ({
     system: e.grade_system as GradeSystem,
     value: e.grade_value,
     count: e.count,
+    style: e.style,
   }));
 
   // Group by system, sort each group, then flatten
@@ -76,7 +77,8 @@ function sortPyramidEntries(entries: PyramidEntry[]): PyramidEntry[] {
       ...sortedGroup.map((g) => ({
         grade_system: g.system,
         grade_value: g.value,
-        count: (g as Grade & { count: number }).count,
+        style: (g as Grade & { count: number; style: string }).style,
+        count: (g as Grade & { count: number; style: string }).count,
       }))
     );
   }
@@ -84,12 +86,12 @@ function sortPyramidEntries(entries: PyramidEntry[]): PyramidEntry[] {
   return sorted;
 }
 
-function isSportSystem(system: string): boolean {
-  return SPORT_SYSTEMS.includes(system as GradeSystem);
+function isSportStyle(style: string): boolean {
+  return style === "lead" || style === "toprope";
 }
 
-function isBoulderSystem(system: string): boolean {
-  return BOULDER_SYSTEMS.includes(system as GradeSystem);
+function isBoulderStyle(style: string): boolean {
+  return style === "boulder";
 }
 
 export default function PyramidPage() {
@@ -133,14 +135,14 @@ export default function PyramidPage() {
 
     if (styleFilter === "all") {
       return {
-        lead: sorted.filter((e) => isSportSystem(e.grade_system)),
-        boulder: sorted.filter((e) => isBoulderSystem(e.grade_system)),
+        lead: sorted.filter((e) => isSportStyle(e.style)),
+        boulder: sorted.filter((e) => isBoulderStyle(e.style)),
       };
     }
 
     return {
-      lead: sorted.filter((e) => isSportSystem(e.grade_system)),
-      boulder: sorted.filter((e) => isBoulderSystem(e.grade_system)),
+      lead: sorted.filter((e) => isSportStyle(e.style)),
+      boulder: sorted.filter((e) => isBoulderStyle(e.style)),
     };
   }, [db, timeRange, styleFilter, activeCompletionTypes]);
 
